@@ -80,5 +80,6 @@ final_disease_prediction = disease_names[predictions[0]]
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    return render_template("index.html")
-
+    if request.method == "GET":
+        return render_template("index.html", error = "")
+    
