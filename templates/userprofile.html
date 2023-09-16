@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html  lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>User Profile</title>
+    <!---Custom CSS File--->
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+
+<body>
+    <h1>User Profile Management</h1>
+    
+    <h2>Change Username</h2>
+    <p>Current Username: <span id="currentUsername">{{username}}</span></p>
+    <form id="usernameForm" method="post" action="/">
+        <label for="newUsername">New Username:</label>
+        <input type="text" id="newUsername" name="newUsername" required>
+        <br>
+        <input type="submit" value="Change Username">
+    </form>
+
+    <h2>Change Password</h2>
+    <form id="passwordForm" method="post" action="/">
+        <label for="currentPassword">Current Password:</label>
+        <input type="password" id="currentPassword" name="currentPassword" required>
+        <br>
+        <label for="newPassword">New Password:</label>
+        <input type="password" id="newPassword" name="newPassword" required>
+        <br>
+        <label for="confirmPassword">Confirm New Password:</label>
+        <input type="password" id="confirmPassword" name="confirmPassword" required>
+        <br>
+        <input type="submit" value="Change Password">
+    </form>
+
+    <h2>Delete Profile</h2>
+    <form id="deleteProfile" method="post" action="/">
+        <input type="submit" id="deleteProfileButton" value="Delete Profile">
+    </form>
+</body>
+
+</html>
