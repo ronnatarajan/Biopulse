@@ -2,10 +2,6 @@
 <title> BioPulse </title>
 <link rel="stylesheet" href="../static/style.css">
 <section class="content">
-    {% for message in get_flashed_messages() %}
-    <div class="flash">{{ message }}</div>
-    {% endfor %}
-    {% block content %}{% endblock %}
     <form method="post" action=>
         {% for symptom in symptom_list %}
         <div>
