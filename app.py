@@ -14,11 +14,11 @@ from sklearn.metrics import accuracy_score, confusion_matrix
 import sqlite3
 from sqlite3 import Error
 import os
+from werkzeug.security import check_password_hash, generate_password_hash
 
 
 # Create sql database
-if __name__ == '__main__':
-    db = os.path.realpath('Users.db')
+db = os.path.realpath('Users.db')
 
 # Connect to sql data
 conn = None
@@ -77,18 +77,66 @@ from sklearn.metrics import classification_report
 logmodel=LogisticRegression(max_iter=1000,C=1)
 logmodel.fit(x_train,y_train)
 
-# Example test case
-predictions = logmodel.predict(x_test)
-vals = disease_names[predictions[0]]
 
-if __name__ == '__main__': 
-   app.run()
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-        return render_template("index.html")
+        return render_template("index.html", error = "")
     elif request.method == "POST":
+   
+        #user is trying to register
+        if request.form.get('log_email')== None:
+            #error checking
+            if request.form.get("sign_email") == "" or  request.form.get("sign_password") == "":
+                return render_template("index.html", error="Please input valid email and password")
+            rows = cur.execute("SELECT * FROM users WHERE email = ?;", request.form.get("sign_email"))
+            #more error checking
+            if len(rows) >=1:
+                return render_template("index.html", error="There is already an account with the given username")
+            #insert user information into database
+            if request.form.get("sign_confirm") == request.form.get("sign_password") and not request.form.get("sign_password") == "" and not request.form.get("sign_email") == "":
+                cur.execute("INSERT INTO users (username, hash) VALUES (?,?);", request.form.get("sign_email"), generate_password_hash(request.form.get("sign_password")))
+                
+                return render_template("checklist.html", symptom_list = x.columns)
+            else:
+                return render_template("index.html", error="Passwords don't match")
+            
+        elif request.form.get('sign_email')== None:
+            """Log user in"""
+
+            print(request.form.get("log_email") == "")
+
+            # Forget any user_id
+            session.clear()
+
+            # User reached route via POST (as by submitting a form via POST)
+            if request.method == "POST":
+
+                # Ensure username was submitted
+                if request.form.get("log_email") == "" or request.form.get("log_password") == "":
+                    return render_template("index.html", error="Must enter email and password when logging in")
+
+                # Query database for username
+                rows = cur.execute("SELECT * FROM users WHERE email = ?", request.form.get("log_email"))
+                print(len(rows))
+                # Ensure username exists and password is correct
+                if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("log_password")):
+                    return render_template("index.html", error="Incorrect login information")
+
+                # Remember which user has logged in
+                session["user_id"] = rows[0]["id"]
+                session["user_name"] = rows[0]["username"]
+
+
+                # Redirect user to home page
+                return redirect("/")
+
+            # User reached route via GET (as by clicking a link or via redirect)
+            else:
+                return render_template("login.html")
+
+
         # if request.form.get()
         # #error checking
         # if not request.form.get("username") or not request.form.get("password"):
