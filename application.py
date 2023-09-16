@@ -1,8 +1,7 @@
+#importing libraries
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
-import pandas as pd
-# Importing libraries
 import numpy as np
 import pandas as pd
 from scipy.stats import mode
@@ -12,6 +11,23 @@ from sklearn.svm import SVC
 from sklearn.naive_bayes import GaussianNB
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score, confusion_matrix
+import sqlite3
+from sqlite3 import Error
+import os
+
+def create_connection(db_file):
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+    except Error as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
+
+
+if __name__ == '__main__':
+    create_connection(os.path.realpath('Users.db'))
 
 # Configure application
 app = Flask(__name__)
