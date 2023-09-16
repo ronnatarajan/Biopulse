@@ -1,6 +1,24 @@
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
+import pandas as pd
+import sqlite3
+from sqlite3 import Error
+import os
+
+def create_connection(db_file):
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+    except Error as e:
+        print(e)
+    finally:
+        if conn:
+            conn.close()
+
+
+if __name__ == '__main__':
+    create_connection(os.path.realpath('Users.db'))
 
 # Configure application
 app = Flask(__name__)
