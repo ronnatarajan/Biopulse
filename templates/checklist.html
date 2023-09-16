@@ -2,7 +2,7 @@
 <title>Checklist Form</title>
 <link rel="stylesheet" href="../static/style.css">
 <section class="content">
-    <form method="post" action= "/">
+    <form id="checklist" method="post" action= "/">
         {% for symptom in symptom_list %}
         <div>
             <input type="hidden" name={{symptom}} value="0">
