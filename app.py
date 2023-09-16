@@ -50,7 +50,6 @@ df = pd.read_csv("Dataset/Training.csv")
 # Column of disease names. We will convert the prognosis column to a numeric
 # Later on, so this will help us get back to strings
 disease_names = df['prognosis']
-df.drop("Unnamed: 133", axis='columns',inplace=True)
 
 # Turn prognosis column into numeric for logistical regression
 encoder = LabelEncoder()
@@ -64,12 +63,9 @@ for val in  progs:
   replaceStruct['prognosis'][val] = progs.index(val)
 df = df.replace(replaceStruct)
 
-
-
 # Get x and y for logistical regression
 x = df.drop('prognosis',axis='columns')
 y=df['prognosis']
-
 
 # Split the data into train and testing
 x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3,random_state=1)
@@ -150,5 +146,4 @@ def index():
         # else:
         #     return apology("Passwords do not match")
         return render_template("index.html", error = "")
-
-    return render_template("index.html", error = "")
+    
