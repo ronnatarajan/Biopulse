@@ -16,9 +16,9 @@
         <input type="checkbox" id="check">
         <div class="login form">
             <header>Login</header>
-            <form method="post" id = "login" action="/">
-                <input type="text" placeholder="Enter your email">
-                <input type="password" placeholder="Enter your password">
+            <form method="post" name = "login" action="/">
+                <input name = "log_email" type="text" placeholder="Enter your email">
+                <input name = "log_password" type="password" placeholder="Enter your password">
                 <a href="#">Forgot password?</a>
                 <input type="submit" class="button" value="Login">
             </form>
@@ -30,10 +30,10 @@
         </div>
         <div class="registration form">
             <header>Signup</header>
-            <form method="post" id = "signup" action="/">
-                <input type="text" placeholder="Enter your email">
-                <input type="password" placeholder="Create a password">
-                <input type="password" placeholder="Confirm your password">
+            <form method="post" name = "signup" action="/">
+                <input name = "sign_email" type="text" placeholder="Enter your email">
+                <input name = "sign_password" type="password" placeholder="Create a password">
+                <input name = "sign_confirm" type="password" placeholder="Confirm your password">
                 <input type="submit" class="button" value="Register">
             </form>
             <div class="signup">

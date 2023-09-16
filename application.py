@@ -47,6 +47,7 @@ df = pd.read_csv("Dataset/Training.csv")
 # Column of disease names. We will convert the prognosis column to a numeric
 # Later on, so this will help us get back to strings
 disease_names = df['prognosis']
+df.drop("Unnamed: 133", axis='columns',inplace=True)
 
 # Turn prognosis column into numeric for logistical regression
 encoder = LabelEncoder()
@@ -60,9 +61,12 @@ for val in  progs:
   replaceStruct['prognosis'][val] = progs.index(val)
 df = df.replace(replaceStruct)
 
+
+
 # Get x and y for logistical regression
 x = df.drop('prognosis',axis='columns')
 y=df['prognosis']
+\
 
 # Split the data into train and testing
 x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3,random_state=1)
@@ -77,9 +81,28 @@ logmodel.fit(x_train,y_train)
 predictions = logmodel.predict(x_test)
 vals = disease_names[predictions[0]]
 
+if __name__ == '__main__': 
+   app.run()
 
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
+        return render_template("index.html")
+    elif request.method == "POST":
+        # if request.form.get()
+        # #error checking
+        # if not request.form.get("username") or not request.form.get("password"):
+        #     return render_template("index.html", error = "Missing Username or Password")
+        # rows = db.execute("SELECT * FROM users WHERE username = ?;", request.form.get("username"))
+        # #more error checking
+        # if len(rows) >=1:
+        #     return render_template("index.html", error = "Username is taken")
+        # #insert user information into database
+        # if request.form.get("password") == request.form.get("confirmation") and request.form.get("username") and request.form.get("password"):
+        #     db.execute("INSERT INTO users (username, hash) VALUES (?,?);", request.form.get("username"), generate_password_hash(request.form.get("password")))
+        #     return render_template("login.html")
+        # else:
+        #     return apology("Passwords do not match")
         return render_template("index.html", error = "")
-    
+
+    return render_template("index.html", error = "")
