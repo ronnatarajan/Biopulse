@@ -17,4 +17,5 @@ Session(app)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    print("pp")
+    return render_template("index.html")
+
