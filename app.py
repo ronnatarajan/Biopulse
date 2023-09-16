@@ -50,6 +50,7 @@ df = pd.read_csv("Dataset/Training.csv")
 # Column of disease names. We will convert the prognosis column to a numeric
 # Later on, so this will help us get back to strings
 disease_names = df['prognosis']
+df.drop("Unnamed: 133", axis='columns',inplace=True)
 
 # Turn prognosis column into numeric for logistical regression
 encoder = LabelEncoder()
