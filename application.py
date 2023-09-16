@@ -59,7 +59,7 @@ logmodel.fit(x_train,y_train)
 
 #example test case
 predictions = logmodel.predict(x_test)
-vals = disease_names[predictions[0]]
+final_disease_prediction = disease_names[predictions[0]]
 
 
 @app.route("/", methods=["GET", "POST"])
