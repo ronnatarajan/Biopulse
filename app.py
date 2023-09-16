@@ -78,8 +78,6 @@ logmodel.fit(x_train,y_train)
 @app.route("/", methods=["GET", "POST"])
 def index():
     if request.method == "GET":
-<<<<<<< HEAD:application.py
-=======
         return render_template("index.html", error = "")
     elif request.method == "POST":
    
@@ -149,6 +147,5 @@ def index():
         #     return render_template("login.html")
         # else:
         #     return apology("Passwords do not match")
->>>>>>> 21510cfe29233015962b12f7d9c21c3a5f6ef46f:app.py
         return render_template("index.html", error = "")
     
