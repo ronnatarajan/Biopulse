@@ -23,11 +23,14 @@ db = os.path.realpath('Users.db')
 # Connect to sql data
 conn = None
 try:
-    conn = sqlite3.connect(db)
+    conn = sqlite3.connect(db, check_same_thread=False)
 except Error as e:
     print(e)
-cur = conn.cursor()
 
+with open('schema.sql') as f:
+    conn.executescript(f.read())
+
+cur = conn.cursor()
 
 # Configure application
 app = Flask(__name__)
@@ -66,7 +69,7 @@ df = df.replace(replaceStruct)
 # Get x and y for logistical regression
 x = df.drop('prognosis',axis='columns')
 y=df['prognosis']
-\
+
 
 # Split the data into train and testing
 x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=.3,random_state=1)
@@ -84,20 +87,20 @@ def index():
     if request.method == "GET":
         return render_template("index.html", error = "")
     elif request.method == "POST":
-   
         #user is trying to register
         if request.form.get('log_email')== None:
             #error checking
             if request.form.get("sign_email") == "" or  request.form.get("sign_password") == "":
                 return render_template("index.html", error="Please input valid email and password")
-            rows = cur.execute("SELECT * FROM users WHERE email = ?;", request.form.get("sign_email"))
+            rows = cur.execute("SELECT * FROM users WHERE email = ?;", (request.form.get("sign_email"),)).fetchall()
             #more error checking
             if len(rows) >=1:
                 return render_template("index.html", error="There is already an account with the given username")
             #insert user information into database
             if request.form.get("sign_confirm") == request.form.get("sign_password") and not request.form.get("sign_password") == "" and not request.form.get("sign_email") == "":
-                cur.execute("INSERT INTO users (username, hash) VALUES (?,?);", request.form.get("sign_email"), generate_password_hash(request.form.get("sign_password")))
-                
+                print(request.form.get("sign_password"))
+                cur.execute("INSERT INTO users (email, hash) VALUES (?,?);", (request.form.get("sign_email"), generate_password_hash(request.form.get("sign_password"))))
+                conn.commit()
                 return render_template("checklist.html", symptom_list = x.columns)
             else:
                 return render_template("index.html", error="Passwords don't match")
@@ -118,23 +121,18 @@ def index():
                     return render_template("index.html", error="Must enter email and password when logging in")
 
                 # Query database for username
-                rows = cur.execute("SELECT * FROM users WHERE email = ?", request.form.get("log_email"))
-                print(len(rows))
+                rows = cur.execute("SELECT * FROM users WHERE email = ?", (request.form.get("log_email"),)).fetchall()
                 # Ensure username exists and password is correct
-                if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("log_password")):
+                if len(rows) != 1 or not check_password_hash(rows[0][1], request.form.get("log_password")):
                     return render_template("index.html", error="Incorrect login information")
-
+                print(rows[0][1])
                 # Remember which user has logged in
-                session["user_id"] = rows[0]["id"]
-                session["user_name"] = rows[0]["username"]
+                session["user_email"] = rows[0][0]
+                session["user_password"] = rows[0][1]
 
 
                 # Redirect user to home page
-                return redirect("/")
-
-            # User reached route via GET (as by clicking a link or via redirect)
-            else:
-                return render_template("login.html")
+                return render_template("checklist.html", symptom_list = x.columns)
 
 
         # if request.form.get()

@@ -1,0 +1,20 @@
+<!doctype html>
+<title> BioPulse </title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<section class="content">
+    {% for message in get_flashed_messages() %}
+    <div class="flash">{{ message }}</div>
+    {% endfor %}
+    {% block content %}{% endblock %}
+    <form method="post" action=>
+        {% for symptom in symptom_list %}
+        <div>
+            <input type="checkbox" name={{symptom}} id={{symptom}} />
+            <label for={{symptom}}>{{symptom}}</label>
+        </div>
+        {% endfor %}
+        <div>
+            <input type="submit" name="submit" value="Submit" />
+        </div>
+    </form>
+</section>
